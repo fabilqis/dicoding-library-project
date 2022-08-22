@@ -8,36 +8,37 @@
 }
 */
 
-const todos = [];
-const RENDER_EVENT = 'render-todo';
-const SAVED_EVENT = 'saved-todo';
-const STORAGE_KEY = 'TODO_APPS';
+const libss = [];
+const RENDER_EVENT = 'render-libs';
+const SAVED_EVENT = 'saved-libs';
+const STORAGE_KEY = 'Book_APPS';
 
 function generateId() {
   return +new Date();
 }
 
-function generateTodoObject(id, task, timestamp, isCompleted) {
+function generateBookObject(id, title, author, bookYear, isCompleted) {
   return {
     id,
-    task,
-    timestamp,
+    title,
+    author,
+    bookYear,
     isCompleted
   };
 }
 
-function findTodo(todoId) {
-  for (const todoItem of todos) {
-    if (todoItem.id === todoId) {
-      return todoItem;
+function findBook(libsId) {
+  for (const libsItem of libss) {
+    if (libsItem.id === libsId) {
+      return libsItem;
     }
   }
   return null;
 }
 
-function findTodoIndex(todoId) {
-  for (const index in todos) {
-    if (todos[index].id === todoId) {
+function findBookIndex(libsId) {
+  for (const index in libss) {
+    if (libss[index].id === libsId) {
       return index;
     }
   }
@@ -45,11 +46,6 @@ function findTodoIndex(todoId) {
 }
 
 
-/**
- * Fungsi ini digunakan untuk memeriksa apakah localStorage didukung oleh browser atau tidak
- *
- * @returns boolean
- */
 function isStorageExist() /* boolean */ {
   if (typeof (Storage) === undefined) {
     alert('Browser kamu tidak mendukung local storage');
@@ -58,53 +54,48 @@ function isStorageExist() /* boolean */ {
   return true;
 }
 
-/**
- * Fungsi ini digunakan untuk menyimpan data ke localStorage
- * berdasarkan KEY yang sudah ditetapkan sebelumnya.
- */
 function saveData() {
   if (isStorageExist()) {
-    const parsed /* string */ = JSON.stringify(todos);
+    const parsed = JSON.stringify(libss);
     localStorage.setItem(STORAGE_KEY, parsed);
     document.dispatchEvent(new Event(SAVED_EVENT));
   }
 }
 
-/**
- * Fungsi ini digunakan untuk memuat data dari localStorage
- * Dan memasukkan data hasil parsing ke variabel {@see todos}
- */
 function loadDataFromStorage() {
-  const serializedData /* string */ = localStorage.getItem(STORAGE_KEY);
+  const serializedData = localStorage.getItem(STORAGE_KEY);
   let data = JSON.parse(serializedData);
 
   if (data !== null) {
-    for (const todo of data) {
-      todos.push(todo);
+    for (const libs of data) {
+      libss.push(libs);
     }
   }
 
   document.dispatchEvent(new Event(RENDER_EVENT));
 }
 
-function makeTodo(todoObject) {
+function makeBook(libsObject) {
 
-  const {id, task, timestamp, isCompleted} = todoObject;
+  const {id, title, author ,bookYear, isCompleted} = libsObject;
 
   const textTitle = document.createElement('h2');
-  textTitle.innerText = task;
+  textTitle.innerText = title;
+
+  const textAuthor = document.createElement('p');
+  textAuthor.innerText = author;
 
   const textTimestamp = document.createElement('p');
-  textTimestamp.innerText = timestamp;
+  textTimestamp.innerText = bookYear;
 
   const textContainer = document.createElement('div');
   textContainer.classList.add('inner');
-  textContainer.append(textTitle, textTimestamp);
+  textContainer.append(textTitle, textAuthor, textTimestamp);
 
   const container = document.createElement('div');
   container.classList.add('item', 'shadow')
   container.append(textContainer);
-  container.setAttribute('id', `todo-${id}`);
+  container.setAttribute('id', `libs-${id}`);
 
   if (isCompleted) {
 
@@ -145,55 +136,56 @@ function makeTodo(todoObject) {
   return container;
 }
 
-function addTodo() {
-  const textTodo = document.getElementById('inputBookTitle').value;
-  const timestamp = document.getElementById('inputBookYear').value;
+function addBook() {
+  const textBook = document.getElementById('inputBookTitle').value;
+  const authorBook = document.getElementById('inputBookAuthor').value;
+  const bookYear = document.getElementById('inputBookYear').value;
+  const isCompleted = document.getElementById('inputBookIsComplete').checked;
 
   const generatedID = generateId();
-  const todoObject = generateTodoObject(generatedID, textTodo, timestamp, false);
-  todos.push(todoObject);
+  const libsObject = generateBookObject(generatedID, textBook, authorBook, bookYear, isCompleted);
+  libss.push(libsObject);
 
   document.dispatchEvent(new Event(RENDER_EVENT));
   saveData();
 }
 
-function addTaskToCompleted(todoId /* HTMLELement */) {
-  const todoTarget = findTodo(todoId);
-
-  if (todoTarget == null) return;
-
-  todoTarget.isCompleted = true;
+function addTaskToCompleted(libsId) {
+  const libsTarget = findBook(libsId);
+  if (libsTarget == null) return;
+  
+  libsTarget.isCompleted = true;
   document.dispatchEvent(new Event(RENDER_EVENT));
   saveData();
 }
 
-function removeTaskFromCompleted(todoId /* HTMLELement */) {
-  const todoTarget = findTodoIndex(todoId);
+function removeTaskFromCompleted(libsId) {
+  const libsTarget = findBookIndex(libsId);
 
-  if (todoTarget === -1) return;
+  if (libsTarget === -1) return;
 
-  todos.splice(todoTarget, 1);
+  libss.splice(libsTarget, 1);
   document.dispatchEvent(new Event(RENDER_EVENT));
   saveData();
 }
 
-function undoTaskFromCompleted(todoId /* HTMLELement */) {
+function undoTaskFromCompleted(libsId) {
 
-  const todoTarget = findTodo(todoId);
-  if (todoTarget == null) return;
+  const libsTarget = findBook(libsId);
+  if (libsTarget == null) return;
 
-  todoTarget.isCompleted = false;
+  libsTarget.isCompleted = false;
   document.dispatchEvent(new Event(RENDER_EVENT));
   saveData();
 }
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  const submitForm /* HTMLFormElement */ = document.getElementById('inputBook');
+  const submitForm  = document.getElementById('inputBook');
 
   submitForm.addEventListener('submit', function (event) {
     event.preventDefault();
-    addTodo();
+    addBook();
   });
 
   if (isStorageExist()) {
@@ -206,19 +198,38 @@ document.addEventListener(SAVED_EVENT, () => {
 });
 
 document.addEventListener(RENDER_EVENT, function () {
-  const uncompletedTODOList = document.getElementById('todos');
-  const listCompleted = document.getElementById('completed-todos');
+  const uncompletedBookList = document.getElementById('libss');
+  const listCompleted = document.getElementById('completed-libss');
 
-  // clearing list item
-  uncompletedTODOList.innerHTML = '';
+  uncompletedBookList.innerHTML = '';
   listCompleted.innerHTML = '';
 
-  for (const todoItem of todos) {
-    const todoElement = makeTodo(todoItem);
-    if (todoItem.isCompleted) {
-      listCompleted.append(todoElement);
+  for (const libsItem of libss) {
+    const libsElement = makeBook(libsItem);
+    if (libsItem.isCompleted) {
+      listCompleted.append(libsElement);
     } else {
-      uncompletedTODOList.append(todoElement);
+      uncompletedBookList.append(libsElement);
     }
   }
 });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  const searchForm  = document.getElementById('searchBook');
+
+  searchForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    searchBooks();
+  });
+});
+
+function searchBooks() {
+  const searchBookTitle = document.getElementById('searchBookTitle').value;
+
+  const item = libss.filter(item=>item.title.toLowerCase().includes('this'));
+  
+  alert(JSON.stringify(item))
+
+}

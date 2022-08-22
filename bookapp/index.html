@@ -21,15 +21,15 @@
     <form id="inputBook">
       <div class="input">
         <label for="inputBookTitle">Judul</label>
-        <input id="inputBookTitle" type="text" >
+        <input id="inputBookTitle" type="text" required>
       </div>
-      <!-- <div class="input">
+      <div class="input">
         <label for="inputBookAuthor">Penulis</label>
         <input id="inputBookAuthor" type="text" required>
-      </div> -->
+      </div>
       <div class="input">
         <label for="inputBookYear">Tahun</label>
-        <input id="inputBookYear" type="number" >
+        <input id="inputBookYear" type="number" required>
       </div>
       <div class="input_inline">
         <label for="inputBookIsComplete">Selesai dibaca</label>
@@ -47,18 +47,25 @@
       <button id="searchSubmit" type="submit">Cari</button>
     </form>
   </section>
+
+  <section class="book_shelf">
+    <h2>Yang Dicari</h2>
+    
+    <div id="find-libss" class="book_list">
+    </div>
+  </section>
   
   <section class="book_shelf">
     <h2>Belum selesai dibaca</h2>
     
-    <div id="todos" class="book_list">
+    <div id="libss" class="book_list">
     </div>
   </section>
   
   <section class="book_shelf">
     <h2>Selesai dibaca</h2>
     
-    <div id="completed-todos" class="book_list">
+    <div id="completed-libss" class="book_list">
     </div>
   </section>
 </main>
