@@ -1,4 +1,5 @@
-* {
+body {
+    background-color: bisque;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -32,7 +33,7 @@ main {
 .input_section {
     display: flex;
     flex-direction: column;
-    padding: 16px;
+    padding: 30px;
     border: 1px solid black;
     border-radius: 10px;
 }
@@ -68,7 +69,6 @@ main {
     border-radius: 5px;
 }
 
-
 .input_section > form > .input > label {
     color: cornflowerblue;
     font-weight: bold;
@@ -91,7 +91,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px;
+    padding: 20px;
     border: 1px solid black;
     border-radius: 10px;
 }
@@ -101,7 +101,7 @@ main {
 }
 
 .search_section > form {
-    padding: 16px;
+    padding: 20px;
     width: 100%;
     display: grid;
     grid-template-columns: auto 1fr 0.5fr;
@@ -128,22 +128,23 @@ main {
 
 .book_shelf {
     margin: 16px 0 0 0;
-    border: 1px solid black;
-    padding: 16px;
+    border: 2px solid black;
+    padding: 20px;
     border-radius: 10px;
 }
 
 .book_shelf > h2 {
     color: cornflowerblue;
+    background-color: pink;
 }
 
 .book_shelf > .book_list {
-    padding: 16px;
+    padding: 20px;
 }
 
 .book_shelf > .book_list > .book_item {
     padding: 8px 16px 16px 16px;
-    border: 1px solid black;
+    border: 5px solid black;
     border-radius: 5px;
     margin: 10px 0;
 }
@@ -169,3 +170,25 @@ main {
     background-color: darkred;
     color: white;
 }
+
+#uncomplete-libss > div{
+    border: 1px solid black;
+    border-radius: 5px; 
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.footer {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: pink;
+    color: #1f4068;
+  }
+  
+  .footer p {
+    font-size: 20px;
+    font-style: bold;
+    font-family: 'Poppins', sans-serif;
+  }

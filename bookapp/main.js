@@ -182,10 +182,18 @@ function undoTaskFromCompleted(libsId) {
 document.addEventListener('DOMContentLoaded', function () {
 
   const submitForm  = document.getElementById('inputBook');
+  const searchForm  = document.getElementById('searchBook');
+
 
   submitForm.addEventListener('submit', function (event) {
     event.preventDefault();
     addBook();
+  });
+
+  searchForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    findDatabyTitle();
+
   });
 
   if (isStorageExist()) {
@@ -198,7 +206,7 @@ document.addEventListener(SAVED_EVENT, () => {
 });
 
 document.addEventListener(RENDER_EVENT, function () {
-  const uncompletedBookList = document.getElementById('libss');
+  const uncompletedBookList = document.getElementById('uncomplete-libss');
   const listCompleted = document.getElementById('completed-libss');
 
   uncompletedBookList.innerHTML = '';
@@ -214,22 +222,34 @@ document.addEventListener(RENDER_EVENT, function () {
   }
 });
 
+function findDatabyTitle() {
+  const searchBookTitle = document.querySelector('#searchBookTitle');
+  const find = searchBookTitle.value.toLowerCase();
 
-document.addEventListener('DOMContentLoaded', function () {
 
-  const searchForm  = document.getElementById('searchBook');
+  const incompleteBookshelfList = document.getElementById('uncomplete-libss');
+  const childincomplete = incompleteBookshelfList.getElementsByTagName('div');
+  for (let i = 0; i < childincomplete.length; i++) {
+    const heading = childincomplete[i].getElementsByTagName('h2')[0];
+    console.log(heading)
 
-  searchForm.addEventListener('submit', function (event) {
-    event.preventDefault();
-    searchBooks();
-  });
-});
+    let textValue = heading.textContent || heading.innerText;
+    if (textValue.toLowerCase().indexOf(find) > -1) {
+      childincomplete[i].style.display = '';
 
-function searchBooks() {
-  const searchBookTitle = document.getElementById('searchBookTitle').value;
-
-  const item = libss.filter(item=>item.title.toLowerCase().includes('this'));
-  
-  alert(JSON.stringify(item))
-
+    } else {
+      childincomplete[i].style.display = 'none';
+    }
+  }
+  const completeBookshelfList = document.getElementById('completed-libss');
+  const childcomplete = completeBookshelfList.getElementsByTagName('div');
+  for (let i = 0; i < childcomplete.length; i++) {
+    const heading = childcomplete[i].getElementsByTagName('h2')[0];
+    let textValue = heading.textContent || heading.innerText;
+    if (textValue.toLowerCase().indexOf(find) > -1) {
+      childcomplete[i].style.display = '';
+    } else {
+      childcomplete[i].style.display = 'none';
+    }
+  }
 }
